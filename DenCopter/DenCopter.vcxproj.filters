@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{dd6730af-3ef8-46f1-890b-a09401b7fd1a}</UniqueIdentifier>
+      <Extensions>.cpp</Extensions>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{cfe9535d-d28b-48f1-82ef-64d4cb1edc62}</UniqueIdentifier>
+      <Extensions>.h</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Controller\altitude_kf.h" />
+    <ClInclude Include="src\Controller\Controller.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sensors\BMP280.h" />
+    <ClInclude Include="src\Sensors\MPU9250.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sensors\MPU9250_Registers.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sensors\IMUSensor.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\ESC_Programming_Mode.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\Timer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\StringConverter.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\ConfigHandler.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Display\Display.h" />
+    <ClInclude Include="src\Comm\I2Ccom.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Comm\PCInput.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Comm\RXInput.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Comm\Serialcom.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Motors\Motor_Driver.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Motors\Motor.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Motors\Motor_Driver_Registers.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Motors\Motor_Driver_Types.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Controller\PID.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wireless_Logging\WirelessLogging.h" />
+    <ClInclude Include="src\Comm\TCPComm.h" />
+    <ClInclude Include="src\Domain\PIDData.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\DenCopter.cpp" />
+    <ClCompile Include="src\Controller\altitude_kf.cpp" />
+    <ClCompile Include="src\Controller\Controller.cpp" />
+    <ClCompile Include="src\Controller\Controller_PID.cpp" />
+    <ClCompile Include="src\Controller\Controller_Thread.cpp" />
+    <ClCompile Include="src\Controller\PID.cpp" />
+    <ClCompile Include="src\Sensors\BMP280.cpp" />
+    <ClCompile Include="src\Sensors\MPU9250.cpp" />
+    <ClCompile Include="src\Sensors\IMUSensor.cpp" />
+    <ClCompile Include="src\Motors\Motor_Driver.cpp" />
+    <ClCompile Include="src\Motors\Motor.cpp" />
+    <ClCompile Include="src\Display\Display.cpp" />
+    <ClCompile Include="src\Comm\RXInput.cpp" />
+    <ClCompile Include="src\Comm\I2Ccom.cpp" />
+    <ClCompile Include="src\Comm\PCInput.cpp" />
+    <ClCompile Include="src\Comm\Serialcom.cpp" />
+    <ClCompile Include="src\Tools\ConfigHandler.cpp" />
+    <ClCompile Include="src\Tools\StringConverter.cpp" />
+    <ClCompile Include="src\Tools\Timer.cpp" />
+    <ClCompile Include="src\Tools\ESC_Programming_Mode.cpp" />
+    <ClCompile Include="src\Wireless_Logging\WirelessLogging.cpp" />
+    <ClCompile Include="src\Comm\TCPComm.cpp" />
+  </ItemGroup>
+</Project>

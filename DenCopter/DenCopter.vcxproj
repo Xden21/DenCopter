@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{c26962f9-7308-4312-a53e-c125f873f8d5}</ProjectGuid>
+    <Keyword>Linux</Keyword>
+    <RootNamespace>QuadCopter</RootNamespace>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <ApplicationType>Linux</ApplicationType>
+    <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+    <TargetLinuxPlatform>Raspberry</TargetLinuxPlatform>
+    <LinuxProjectType>{8748239F-558C-44D1-944B-07B09C35B330}</LinuxProjectType>
+    <ProjectName>DenCopter</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <AdditionalSourcesToCopyMapping>$(ProjectDir)Include\;C:\Users\denni\Documents\Projects\RpiSysroot\sysroot:=/;$(ProjectDir)Include:=~/projects/QuadCopter/Include;$(AdditionalSourcesToCopyMapping)</AdditionalSourcesToCopyMapping>
+    <IncludePath>C:\Users\denni\Documents\Projects\RPi_Includes;C:\Users\denni\Documents\Projects\DenCopter\DenCopter\src\</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <AdditionalSourcesToCopyMapping>$(ProjectDir)Include\;C:\Users\denni\Documents\Projects\RPi_Includes\</AdditionalSourcesToCopyMapping>
+    <IncludePath>C:\Users\denni\Documents\Projects\RPi_Includes\;$(IncludePath)</IncludePath>
+    <SourcePath>C:\Users\denni\Documents\Projects\RPi_Includes\;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <Link>
+      <LibraryDependencies>wiringPi;pthread</LibraryDependencies>
+    </Link>
+    <RemotePostBuildEvent>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </RemotePostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <Link>
+      <LibraryDependencies>wiringPi;pthread</LibraryDependencies>
+    </Link>
+    <RemotePostBuildEvent>
+      <Command>gpio export 17 out</Command>
+      <Message>export pin 17 using the gpio utility so that we can execute the blink program without sudo</Message>
+    </RemotePostBuildEvent>
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\denni\Documents\Projects\RPi_Includes\;$(ProjectDir)Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Comm\TCPComm.h" />
+    <ClInclude Include="src\Domain\PIDData.h" />
+    <ClInclude Include="src\Wireless_Logging\WirelessLogging.h" />
+    <ClInclude Include="src\Controller\altitude_kf.h" />
+    <ClInclude Include="src\Sensors\BMP280.h" />
+    <ClInclude Include="src\Tools\ConfigHandler.h" />
+    <ClInclude Include="src\Display\Display.h" />
+    <ClInclude Include="src\Tools\ESC_Programming_Mode.h" />
+    <ClInclude Include="src\Comm\I2Ccom.h" />
+    <ClInclude Include="src\Sensors\MPU9250.h" />
+    <ClInclude Include="src\Sensors\MPU9250_Registers.h" />
+    <ClInclude Include="src\Comm\PCInput.h" />
+    <ClInclude Include="src\Motors\Motor_Driver_Registers.h" />
+    <ClInclude Include="src\Sensors\IMUSensor.h" />
+    <ClInclude Include="src\Motors\Motor_Driver.h" />
+    <ClInclude Include="src\Motors\Motor_Driver_Types.h" />
+    <ClInclude Include="src\Motors\Motor.h" />
+    <ClInclude Include="src\Controller\PID.h" />
+    <ClInclude Include="src\Controller\Controller.h" />
+    <ClInclude Include="src\Comm\RXInput.h" />
+    <ClInclude Include="src\Comm\Serialcom.h" />
+    <ClInclude Include="src\Tools\StringConverter.h" />
+    <ClInclude Include="src\Tools\Timer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Comm\TCPComm.cpp" />
+    <ClCompile Include="src\Wireless_Logging\WirelessLogging.cpp" />
+    <ClCompile Include="src\Controller\altitude_kf.cpp" />
+    <ClCompile Include="src\Sensors\BMP280.cpp" />
+    <ClCompile Include="src\Tools\ConfigHandler.cpp" />
+    <ClCompile Include="src\Controller\Controller.cpp" />
+    <ClCompile Include="src\Controller\Controller_PID.cpp" />
+    <ClCompile Include="src\Controller\Controller_Thread.cpp" />
+    <ClCompile Include="src\DenCopter.cpp" />
+    <ClCompile Include="src\Display\Display.cpp" />
+    <ClCompile Include="src\Tools\ESC_Programming_Mode.cpp" />
+    <ClCompile Include="src\Comm\I2Ccom.cpp" />
+    <ClCompile Include="src\Sensors\IMUSensor.cpp" />
+    <ClCompile Include="src\Motors\Motor.cpp" />
+    <ClCompile Include="src\Motors\Motor_Driver.cpp" />
+    <ClCompile Include="src\Sensors\MPU9250.cpp" />
+    <ClCompile Include="src\Comm\PCInput.cpp" />
+    <ClCompile Include="src\Controller\PID.cpp" />
+    <ClCompile Include="src\Comm\RXInput.cpp" />
+    <ClCompile Include="src\Comm\Serialcom.cpp" />
+    <ClCompile Include="src\Tools\StringConverter.cpp" />
+    <ClCompile Include="src\Tools\Timer.cpp" />
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\denni\Documents\Projects\RPi_Includes;C:\Users\denni\Documents\Projects\DenCopter\DenCopter\Include</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <BrowseInformation>true</BrowseInformation>
+    </ClCompile>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

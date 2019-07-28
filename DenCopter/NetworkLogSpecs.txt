@@ -1,0 +1,16 @@
+Network access:
+
+1) Separate thread
+2) Comm speed dictated by client (handshaking) with limit
+3) Comm is full duplex: can send and receive (happens at same time)
+
+Sends: Inputs, attitude data.
+Reveives: PID tuning data. => Can only update PIDS when not in use.
+
+Comm establishment:
+Client sends: DencopterClient
+
+001 => ok
+002 => Bad id
+003 => no socket available
+004... => unknown
