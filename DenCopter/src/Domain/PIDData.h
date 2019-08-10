@@ -2,6 +2,7 @@
 
 struct Attitude_PIDData
 {
+	int mode;
 	float yaw_KP;
 	float yaw_KI;
 	float yaw_KD;

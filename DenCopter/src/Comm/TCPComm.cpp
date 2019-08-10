@@ -161,6 +161,7 @@ void TCPComm::loggerThread(void* newsocketfd)
 			lock.release();
 
 			// Append (new) PID data
+			message += PIDMode + "|";
 			std::unique_lock<std::mutex> PIDLock(PIDMutex);
 			std::string PIDMessage = buildMessageData(PIDData_Raw, PID_DATA_COUNT);
 			PIDLock.unlock();
@@ -211,6 +212,7 @@ void TCPComm::setLoggingData(float* data, size_t amount)
 void TCPComm::getAttitudePIDData(Attitude_PIDData* data)
 {
 	// Mutex should be locked before entering function
+	data->mode = PIDMode;
 	data->yaw_KP = PIDData_Raw[0];
 	data->yaw_KI = PIDData_Raw[1];
 	data->yaw_KD = PIDData_Raw[2];
@@ -224,6 +226,7 @@ void TCPComm::getAttitudePIDData(Attitude_PIDData* data)
 
 void TCPComm::setAttitudePIDData(Attitude_PIDData* data)
 {
+	PIDMode = data->mode;
 	PIDData_Raw[0] = data->yaw_KP;
 	PIDData_Raw[1] = data->yaw_KI;
 	PIDData_Raw[2] = data->yaw_KD;

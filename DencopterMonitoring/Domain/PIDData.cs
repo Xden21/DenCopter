@@ -81,6 +81,14 @@ namespace DencopterMonitoring.Domain
             set { SetProperty(ref roll_KD, value); }
         }
 
+        private int pidMode;
+
+        public int PIDMode
+        {
+            get { return pidMode; }
+            set { SetProperty(ref pidMode, value); }
+        }
+
 
         public override string ToString()
         {

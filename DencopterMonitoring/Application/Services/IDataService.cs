@@ -11,6 +11,8 @@ namespace DencopterMonitoring.Application.Services
     {
         event EventHandler<DataUpdateEventArgs> DataUpdateEvent;
 
+        event EventHandler<PIDUpdateEventArgs> PIDDataUpdateEvent;
+
         List<DataSet> UnprocessedDataSets { get; set; }
 
         List<DataSet> AllDataSets { get; set; }
@@ -20,5 +22,7 @@ namespace DencopterMonitoring.Application.Services
         void SaveLoggingToDisk();
 
         void TriggerDataUpdateEvent(List<DataSet> dataSets);
+
+        void TriggerPIDDataUpdateEvent(PIDData data);
     }
 }

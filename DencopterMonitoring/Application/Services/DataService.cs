@@ -33,11 +33,18 @@ namespace DencopterMonitoring.Application.Services
 
         public event EventHandler<DataUpdateEventArgs> DataUpdateEvent;
 
+        public event EventHandler<PIDUpdateEventArgs> PIDDataUpdateEvent;
+
         public void TriggerDataUpdateEvent(List<DataSet> dataSets)
         {
             DataUpdateEvent?.Invoke(this, new DataUpdateEventArgs(dataSets));
         }
         
+        public void TriggerPIDDataUpdateEvent(PIDData data)
+        {
+            PIDDataUpdateEvent?.Invoke(this, new PIDUpdateEventArgs(data));
+        }
+
         /*
         * List of datasets that haven't been processed.
         */
@@ -96,5 +103,15 @@ namespace DencopterMonitoring.Application.Services
         }
 
         public List<DataSet> DataSets { get; set; }
+    }
+
+    public class PIDUpdateEventArgs: EventArgs
+    {
+        public PIDUpdateEventArgs(PIDData data)
+        {
+            PIDData = data;
+        }
+
+        public PIDData PIDData { get; set; }
     }
 }

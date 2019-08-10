@@ -104,6 +104,7 @@
     <Compile Include="Application\Controllers\AngleMonitoringController.cs" />
     <Compile Include="Application\Controllers\MotorMonitoringController.cs" />
     <Compile Include="Application\Controllers\NetworkAccessController.cs" />
+    <Compile Include="Application\Controllers\PIDController.cs" />
     <Compile Include="Application\Controllers\StatusBarController.cs" />
     <Compile Include="Application\Services\DataService.cs" />
     <Compile Include="Application\Services\GeneralService.cs" />

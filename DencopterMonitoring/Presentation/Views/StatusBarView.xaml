@@ -14,7 +14,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <GroupBox Header="Drone Status" Grid.Column="0">
+        <GroupBox Header="Drone Status" Grid.Column="0" Margin="5,0,0,5">
             <Grid VerticalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -30,7 +30,7 @@
                 <TextBlock Text="{Binding FlightMode}" FontSize="18" Grid.Row="1" Grid.Column="1"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Connection Status" Grid.Column="1">
+        <GroupBox Header="Connection Status" Grid.Column="1" Margin="1,0,5,5">
             <StackPanel Orientation="Vertical">
                 <Border Background="{Binding ElementName=ConnectionText, Path=Background}" BorderThickness="2" CornerRadius="10" Padding="5" BorderBrush="Black" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="5">
                     <TextBlock x:Name="ConnectionText" FontSize="20" Padding="5" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ConnectionState}">

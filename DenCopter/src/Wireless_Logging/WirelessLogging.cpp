@@ -5,8 +5,10 @@ WirelessLogging::WirelessLogging(Controller* flightController)
 	this->flightController = flightController;
 	server.setupLoggingServer();
 	Attitude_PIDData pidData;
+	lastAngleMode = flightController->getAngleMode();
 	if (flightController->getAngleMode())
 	{
+		pidData.mode = 1;
 		pidData.yaw_KP = flightController->yaw_angle_KP;
 		pidData.yaw_KI = flightController->yaw_angle_KI;
 		pidData.yaw_KD = flightController->yaw_angle_KD;
@@ -19,6 +21,7 @@ WirelessLogging::WirelessLogging(Controller* flightController)
 	}
 	else
 	{
+		pidData.mode = 0;
 		pidData.yaw_KP = flightController->yaw_rate_KP;
 		pidData.yaw_KI = flightController->yaw_rate_KI;
 		pidData.yaw_KD = flightController->yaw_rate_KD;
@@ -64,6 +67,41 @@ void WirelessLogging::PIDDataThreadFunc()
 		server.PIDSignal.wait(PIDLock, [&] {return server.PIDDataAvailable; });
 		server.PIDDataAvailable = false;
 		Attitude_PIDData data;
+
+		if (flightController->getAngleMode() != lastAngleMode)
+		{
+			lastAngleMode = flightController->getAngleMode();
+
+			Attitude_PIDData pidData;
+			if (flightController->getAngleMode())
+			{
+				pidData.mode = 1;
+				pidData.yaw_KP = flightController->yaw_angle_KP;
+				pidData.yaw_KI = flightController->yaw_angle_KI;
+				pidData.yaw_KD = flightController->yaw_angle_KD;
+				pidData.pitch_KP = flightController->pitch_angle_KP;
+				pidData.pitch_KI = flightController->pitch_angle_KI;
+				pidData.pitch_KD = flightController->pitch_angle_KD;
+				pidData.roll_KP = flightController->roll_angle_KP;
+				pidData.roll_KI = flightController->roll_angle_KI;
+				pidData.roll_KD = flightController->roll_angle_KD;
+			}
+			else
+			{
+				pidData.mode = 0;
+				pidData.yaw_KP = flightController->yaw_rate_KP;
+				pidData.yaw_KI = flightController->yaw_rate_KI;
+				pidData.yaw_KD = flightController->yaw_rate_KD;
+				pidData.pitch_KP = flightController->pitch_rate_KP;
+				pidData.pitch_KI = flightController->pitch_rate_KI;
+				pidData.pitch_KD = flightController->pitch_rate_KD;
+				pidData.roll_KP = flightController->roll_rate_KP;
+				pidData.roll_KI = flightController->roll_rate_KI;
+				pidData.roll_KD = flightController->roll_rate_KD;
+			}
+			// Puts new data in, and later get fetched back.
+			server.setAttitudePIDData(&pidData);
+		}
 		server.getAttitudePIDData(&data);
 		PIDLock.unlock();
 		std::unique_lock<std::mutex> PIDContrlLock(flightController->PIDMutex);

@@ -22,6 +22,7 @@ namespace DencopterMonitoring.Application.Controllers
         private readonly StatusBarController statusBarController;
         private readonly AngleMonitoringController angleMonitoringController;
         private readonly MotorMonitoringController motorMonitoringController;
+        private readonly PIDController pIDController;
 
         private readonly IShellService shellService;
         private readonly ShellViewModel shellViewModel;
@@ -43,7 +44,8 @@ namespace DencopterMonitoring.Application.Controllers
                                         ShellViewModel shellViewModel,
                                         StatusBarController statusBarController,
                                         AngleMonitoringController angleMonitoringController,
-                                        MotorMonitoringController motorMonitoringController)
+                                        MotorMonitoringController motorMonitoringController,
+                                        PIDController pIDController)
         {
             this.settingsService = settingsService;
             this.generalService = generalService;
@@ -53,6 +55,7 @@ namespace DencopterMonitoring.Application.Controllers
             this.statusBarController = statusBarController;
             this.angleMonitoringController = angleMonitoringController;
             this.motorMonitoringController = motorMonitoringController;
+            this.pIDController = pIDController;
         }
 
         #endregion
@@ -64,6 +67,7 @@ namespace DencopterMonitoring.Application.Controllers
             statusBarController.Initialize();
             angleMonitoringController.Initialize();
             motorMonitoringController.Initialize();
+            pIDController.Initialize();
             shellViewModel.ChangeViewCommand = new DelegateCommand(ChangeView);
             SetupCharting();
         }

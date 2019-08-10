@@ -72,6 +72,8 @@ private:
 
 	float* loggingData;
 
+	int PIDMode;
+
 	float PIDData_Raw[PID_DATA_COUNT];
 
 	void loggingServer();

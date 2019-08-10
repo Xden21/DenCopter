@@ -14,23 +14,6 @@ namespace DencopterMonitoring.Domain
         public DataSet()
         { }
 
-        private bool pidIncl;
-
-        public bool PIDIncl
-        {
-            get { return pidIncl; }
-            set { SetProperty(ref pidIncl, value); }
-        }
-
-        private PIDData pidData;
-
-        public PIDData PIDData
-        {
-            get { return pidData; }
-            set { SetProperty(ref pidData, value); }
-        }
-
-
         private bool validInfo;
 
         public bool ValidInfo
@@ -38,7 +21,24 @@ namespace DencopterMonitoring.Domain
             get { return validInfo; }
             set { SetProperty(ref validInfo, value); }
         }
-        
+
+        private bool newPIDData;
+
+        public bool NewPIDData
+        {
+            get { return newPIDData; }
+            set { SetProperty(ref newPIDData, value); }
+        }
+
+        private PIDData pIDData;
+
+        public PIDData PIDData
+        {
+            get { return pIDData; }
+            set { SetProperty(ref pIDData, value); }
+        }
+
+
         private int flightMode;
 
         public int FlightMode

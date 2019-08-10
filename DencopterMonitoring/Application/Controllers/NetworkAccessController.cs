@@ -29,7 +29,7 @@ namespace DencopterMonitoring.Application.Controllers
 
         private IGeneralService generalService;
         private ISettingsService settingsService;
-        private IDataService dataFetchService;
+        private IDataService dataService;
         private TcpClient connection;
         private NetworkStream stream;
         private Thread NetworkThread;
@@ -45,7 +45,7 @@ namespace DencopterMonitoring.Application.Controllers
         {
             this.generalService = generalService;
             this.settingsService = settingsService;
-            this.dataFetchService = dataFetchService;
+            this.dataService = dataFetchService;
             dataFetchService.UnprocessedDataSets = new List<DataSet>();
             generalService.PropertyChanged += GeneralService_PropertyChanged;
             connecting = false;
@@ -212,10 +212,14 @@ namespace DencopterMonitoring.Application.Controllers
                     }
                     if (fetchedData.ValidInfo)
                     {
-                        lock (dataFetchService.DataLock)
+                        lock (dataService.DataLock)
                         {
-                            dataFetchService.UnprocessedDataSets.Add(fetchedData);
+                            dataService.UnprocessedDataSets.Add(fetchedData);
                         }
+                    }
+                    if(fetchedData.NewPIDData)
+                    {
+                        dataService.TriggerPIDDataUpdateEvent(fetchedData.PIDData);
                     }
                     Thread.Sleep((int)(1.0 / settingsService.LoggerFreq * 1000.0));
                 }
@@ -266,6 +270,8 @@ namespace DencopterMonitoring.Application.Controllers
             float timeStamp = -1000;
             EulerAngle AttMeasured = null, AttReference = null;
             MotorSpeeds motorSpeeds = null;
+            int lastPIDMode = 0;
+
             if (dataArray[0] != "OK"  && dataArray[0] != "PID")
             {
                 valid = false;
@@ -277,6 +283,11 @@ namespace DencopterMonitoring.Application.Controllers
                     if(dataArray[0] == "PID")
                     {
                         newPIDData = true;
+                    }
+                    else if(int.Parse(dataArray[13]) != lastPIDMode)
+                    {
+                        newPIDData = true;
+                        lastPIDMode = int.Parse(dataArray[13]);
                     }
                     // TODO FIX INDICES
                     flightMode = (int)Math.Round(float.Parse(dataArray[0]));
@@ -305,15 +316,16 @@ namespace DencopterMonitoring.Application.Controllers
                     {
                         pIDData = new PIDData()
                         {
-                            Yaw_KP = float.Parse(dataArray[13]),
-                            Yaw_KI = float.Parse(dataArray[14]),
-                            Yaw_KD = float.Parse(dataArray[15]),
-                            Pitch_KP = float.Parse(dataArray[16]),
-                            Pitch_KI = float.Parse(dataArray[17]),
-                            Pitch_KD = float.Parse(dataArray[18]),
-                            Roll_KP = float.Parse(dataArray[19]),
-                            Roll_KI = float.Parse(dataArray[20]),
-                            Roll_KD = float.Parse(dataArray[21])
+                            PIDMode = int.Parse(dataArray[13]),
+                            Yaw_KP = float.Parse(dataArray[14]),
+                            Yaw_KI = float.Parse(dataArray[15]),
+                            Yaw_KD = float.Parse(dataArray[16]),
+                            Pitch_KP = float.Parse(dataArray[17]),
+                            Pitch_KI = float.Parse(dataArray[18]),
+                            Pitch_KD = float.Parse(dataArray[19]),
+                            Roll_KP = float.Parse(dataArray[20]),
+                            Roll_KI = float.Parse(dataArray[21]),
+                            Roll_KD = float.Parse(dataArray[22])
                         };
                     }
                 }
@@ -326,7 +338,7 @@ namespace DencopterMonitoring.Application.Controllers
             return new DataSet
             {
                 ValidInfo = valid,
-                PIDIncl = newPIDData,
+                NewPIDData = newPIDData,
                 PIDData = pIDData,
                 FlightMode = flightMode,
                 TimeStamp = timeStamp,

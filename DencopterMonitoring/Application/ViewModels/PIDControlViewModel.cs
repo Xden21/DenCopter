@@ -12,6 +12,7 @@ namespace DencopterMonitoring.Application.ViewModels
     [Export]
     public class PIDControlViewModel : ViewModel<IPIDControlView>
     {
+        [ImportingConstructor]
         public PIDControlViewModel(IPIDControlView view) : base(view)
         {
         }

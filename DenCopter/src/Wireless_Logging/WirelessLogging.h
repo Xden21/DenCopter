@@ -34,4 +34,8 @@ public:
 	void PIDDataThreadFunc();
 
 	std::atomic_bool finished;
+
+private:
+
+	bool lastAngleMode;
 };
