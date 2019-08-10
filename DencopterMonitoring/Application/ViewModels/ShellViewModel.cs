@@ -28,9 +28,11 @@ namespace DencopterMonitoring.Application.ViewModels
             set => SetProperty(ref changeViewCommand, value);
         }
 
+        private IShellService shellService;
         public IShellService ShellService
         {
-            get;
+            get => shellService;
+            private set => SetProperty(ref shellService, value);
         }
 
         #endregion
@@ -42,13 +44,21 @@ namespace DencopterMonitoring.Application.ViewModels
             : base(view)
         {
             ShellService = shellService;
-            ChangeViewCommand = new DelegateCommand(ShellService.ChangeView);
         }
 
         #endregion
 
         #region Methods
                
+        public void Show()
+        {
+            ViewCore.Show();
+        }
+
+        public void Close()
+        {
+            ViewCore.Close();
+        }
 
         #endregion
     }

@@ -1,17 +1,23 @@
-﻿namespace DencopterMonitoring.Application.Services
+﻿using System.ComponentModel;
+
+namespace DencopterMonitoring.Application.Services
 {
     public interface IShellService
     {
-        string CurrentView { get; set; }
-
+        event PropertyChangedEventHandler PropertyChanged;
+               
         object StatusBarViewModel { get; set; }
 
-        object MonitoringViewModel { get; set; }
+        object AngleMonitoringViewModel { get; set; }
+
+        object MotorMonitoringViewModel { get; set; }
 
         object PID_TuningViewModel { get; set; }
 
-        object CurrentViewModel { get; set; }
+        bool AngleVisible { get; set; }
 
-        void ChangeView(object arg);
+        bool MotorVisible { get; set; }
+
+        bool PIDVisible { get; set; }
     }
 }

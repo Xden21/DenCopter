@@ -5,12 +5,12 @@ using System.Windows.Controls;
 namespace DencopterMonitoring.Presentation.Views
 {
     /// <summary>
-    /// Interaction logic for StatusBarView.xaml
+    /// Interaction logic for PIDControlView.xaml
     /// </summary>
-    [Export(typeof(IStatusBarView))]
-    public partial class StatusBarView : UserControl, IStatusBarView
+    [Export(typeof(IPIDControlView))]
+    public partial class PIDControlView : UserControl, IPIDControlView
     {
-        public StatusBarView()
+        public PIDControlView()
         {
             InitializeComponent();
         }

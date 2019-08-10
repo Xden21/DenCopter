@@ -18,7 +18,7 @@
 #define MOTOR_DRIVER_FREQ 400
 #define SENSOR_BETA 1.0f
 #define SINGLE_ANGLE_PID_MODE true
-
+#define LOG_AMOUNT 13
 volatile bool newSensorMeasurement = true;
 
 //Main loop for the the Quad, syncs input with the controller.
@@ -51,7 +51,9 @@ void StartCopter()
 
 	WirelessLogging logger(&controller);
 
-	float loggerdata[6] = { 0,0,0,0,0,0 };
+	float loggerdata[LOG_AMOUNT];
+	int runtime = 0;
+
 	logger.startLogging(loggerdata);
 
 	std::cout << "READY" << std::endl;
@@ -61,11 +63,19 @@ void StartCopter()
 	while (!input.getShutdown())
 	{
 		controller.setAngleMode(input.getAngleMode());
+		float inputs[4] = {0,0,0,0};
 		if (input.getArmed() && (!armed) && !input.getKillSwitch())
 		{
 			std::cout << "Arming..." << std::endl;
 			display.writeStringToDisp("CAL.B", true);
 			armed = true;
+			controller.getFlightData(loggerdata);
+			loggerdata[0] = input.getAngleMode() ? 1 : 0;
+			loggerdata[1] = (float)getTimeU().count() / 1000000.0f;
+			loggerdata[2] = 1;
+			loggerdata[6] = inputs[2];
+			loggerdata[7] = inputs[1];
+			loggerdata[8] = inputs[0];
 			controller.armMotors();
 			controller.sensorWarmUp();
 			controller.setLanded(false);
@@ -81,17 +91,18 @@ void StartCopter()
 		}
 		//Start input to output loop
 		us then = getTimeU();
-		float inputs[4] = {};
 		while (input.getArmed())
 		{
 			input.getInputs(inputs); //Get inputs from controller
 			controller.setInput(inputs, input.getAltMode(), input.getKillSwitch());
 
-			controller.getAttitudeData(loggerdata);
-			loggerdata[3] = inputs[2];
-			loggerdata[4] = inputs[1];
-			loggerdata[5] = inputs[0];
-
+			controller.getFlightData(loggerdata);
+			loggerdata[0] = input.getAngleMode() ? 1 : 0;
+			loggerdata[1] = (float)getTimeU().count()/1000000.0f;
+			loggerdata[2] = 2;
+			loggerdata[6] = inputs[2];
+			loggerdata[7] = inputs[1];
+			loggerdata[8] = inputs[0];
 			logger.setLoggingData(loggerdata);
 
 			auto now = getTimeU();
@@ -103,6 +114,15 @@ void StartCopter()
 			then = getTimeU();
 		}
 		delay(10);
+		controller.getFlightData(loggerdata);
+		loggerdata[0] = input.getAngleMode() ? 1 : 0;
+		loggerdata[1] = (float)getTimeU().count() / 1000000.0f;;
+		loggerdata[2] = 0;
+		loggerdata[6] = inputs[2];
+		loggerdata[7] = inputs[1];
+		loggerdata[8] = inputs[0];
+
+		logger.setLoggingData(loggerdata);
 	}
 	std::cout << "exiting" << std::endl;
 	return;

@@ -1,0 +1,231 @@
+﻿<UserControl x:Class="DencopterMonitoring.Presentation.Views.MotorMonitoringView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DencopterMonitoring.Presentation.Views"
+             xmlns:conv="clr-namespace:DencopterMonitoring.Domain.Resources.Converters"
+             xmlns:vm="clr-namespace:DencopterMonitoring.Application.ViewModels"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:lvcG="clr-namespace:LiveCharts.Geared;assembly=LiveCharts.Geared"
+             mc:Ignorable="d" 
+             d:DesignHeight="1080" d:DesignWidth="1920"
+             d:DataContext="{d:DesignInstance vm:MotorMonitoringViewModel}">
+    <UserControl.Resources>
+        <conv:OpacityConverter x:Key="OpacityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border  BorderBrush="#FFBBBBBB" Grid.Row="0" Grid.Column="0" BorderThickness="2" CornerRadius="8" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" FontSize="40" Foreground="#404040" Margin="20, 10">Motor FL</TextBlock>
+                <Canvas Grid.Row="1" Name="MotorFLCanvas" Margin="3, 3, 3, 20">
+                    <ListBox 
+                              Panel.ZIndex="1" Canvas.Left="60" Canvas.Top="20" BorderThickness="0" Background="Transparent" PreviewMouseDown="ListBox_PreviewMouseDown" ItemsSource="{Binding Series, ElementName=MotorFL}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding (lvc:LineSeries.Title)}" 
+                                           Foreground="{Binding (lvc:LineSeries.Stroke)}"
+                                           Opacity="{Binding (lvc:LineSeries.Visibility), Converter={StaticResource OpacityConverter}}"
+                                           FontSize="18"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                    <lvc:CartesianChart Height="{Binding ElementName=MotorFLCanvas, Path=ActualHeight}" Width="{Binding ElementName=MotorFLCanvas, Path=ActualWidth}"
+                                     Hoverable="False" DataTooltip="{x:Null}" x:Name="MotorFL"
+                                            DisableAnimations="True" LegendLocation="None" IsEnabled="{Binding AttEnable}">
+                        <lvc:CartesianChart.Series>
+                            <lvcG:GLineSeries Title = "Speed Percentage" LineSmoothness = "0" Fill ="Transparent" Values ="{Binding MotorFLPoints}"  PointGeometry = "{x:Null}"/>                           
+                        </lvc:CartesianChart.Series>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis FontSize="14" ShowLabels="False"/>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis FontSize="14" LabelFormatter="{Binding Formatter}" MinValue="0" MaxValue="100">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Step="10"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </Canvas>
+            </Grid>
+        </Border>
+        <Border  BorderBrush="#FFBBBBBB" Grid.Row="0" Grid.Column="1" BorderThickness="2" CornerRadius="8" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" FontSize="40" Foreground="#404040" Margin="20, 10">Motor FR</TextBlock>
+                <Canvas Grid.Row="1" Name="MotorFRCanvas" Margin="3, 3, 3, 20">
+                    <ListBox 
+                              Panel.ZIndex="1" Canvas.Left="60" Canvas.Top="20" BorderThickness="0" Background="Transparent" PreviewMouseDown="ListBox_PreviewMouseDown" ItemsSource="{Binding Series, ElementName=MotorFR}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding (lvc:LineSeries.Title)}" 
+                                           Foreground="{Binding (lvc:LineSeries.Stroke)}"
+                                           Opacity="{Binding (lvc:LineSeries.Visibility), Converter={StaticResource OpacityConverter}}"
+                                           FontSize="18"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                    <lvc:CartesianChart Height="{Binding ElementName=MotorFRCanvas, Path=ActualHeight}" Width="{Binding ElementName=MotorFRCanvas, Path=ActualWidth}"
+                                     Hoverable="False" DataTooltip="{x:Null}" x:Name="MotorFR"
+                                            DisableAnimations="True" LegendLocation="None" IsEnabled="{Binding AttEnable}">
+                        <lvc:CartesianChart.Series>
+                            <lvcG:GLineSeries Title = "Speed Percentage" LineSmoothness = "0" Fill ="Transparent" Values ="{Binding MotorFRPoints}"  PointGeometry = "{x:Null}"/>
+                        </lvc:CartesianChart.Series>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis FontSize="14" ShowLabels="False"/>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis FontSize="14" LabelFormatter="{Binding Formatter}" MinValue="0" MaxValue="100">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Step="10"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </Canvas>
+            </Grid>
+        </Border>
+        <Border  BorderBrush="#FFBBBBBB" Grid.Row="1" Grid.Column="0" BorderThickness="2" CornerRadius="8" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" FontSize="40" Foreground="#404040" Margin="20, 10">Motor BL</TextBlock>
+                <Canvas Grid.Row="1" Name="MotorBLCanvas" Margin="3, 3, 3, 20">
+                    <ListBox 
+                              Panel.ZIndex="1" Canvas.Left="60" Canvas.Top="20" BorderThickness="0" Background="Transparent" PreviewMouseDown="ListBox_PreviewMouseDown" ItemsSource="{Binding Series, ElementName=MotorBL}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding (lvc:LineSeries.Title)}" 
+                                           Foreground="{Binding (lvc:LineSeries.Stroke)}"
+                                           Opacity="{Binding (lvc:LineSeries.Visibility), Converter={StaticResource OpacityConverter}}"
+                                           FontSize="18"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                    <lvc:CartesianChart Height="{Binding ElementName=MotorBLCanvas, Path=ActualHeight}" Width="{Binding ElementName=MotorBLCanvas, Path=ActualWidth}"
+                                     Hoverable="False" DataTooltip="{x:Null}" x:Name="MotorBL"
+                                            DisableAnimations="True" LegendLocation="None" IsEnabled="{Binding AttEnable}">
+                        <lvc:CartesianChart.Series>
+                            <lvcG:GLineSeries Title = "Speed Percentage" LineSmoothness = "0" Fill ="Transparent" Values ="{Binding MotorBLPoints}"  PointGeometry = "{x:Null}"/>
+                        </lvc:CartesianChart.Series>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis FontSize="14" ShowLabels="False"/>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis FontSize="14" LabelFormatter="{Binding Formatter}" MinValue="0" MaxValue="100">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Step="10"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </Canvas>
+            </Grid>
+        </Border>
+        <Border  BorderBrush="#FFBBBBBB" Grid.Row="1" Grid.Column="1" BorderThickness="2" CornerRadius="8" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" FontSize="40" Foreground="#404040" Margin="20, 10">Motor BR</TextBlock>
+                <Canvas Grid.Row="1" Name="MotorBRCanvas" Margin="3, 3, 3, 20">
+                    <ListBox 
+                              Panel.ZIndex="1" Canvas.Left="60" Canvas.Top="20" BorderThickness="0" Background="Transparent" PreviewMouseDown="ListBox_PreviewMouseDown" ItemsSource="{Binding Series, ElementName=MotorBR}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding (lvc:LineSeries.Title)}" 
+                                           Foreground="{Binding (lvc:LineSeries.Stroke)}"
+                                           Opacity="{Binding (lvc:LineSeries.Visibility), Converter={StaticResource OpacityConverter}}"
+                                           FontSize="18"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                    <lvc:CartesianChart Height="{Binding ElementName=MotorBRCanvas, Path=ActualHeight}" Width="{Binding ElementName=MotorBRCanvas, Path=ActualWidth}"
+                                     Hoverable="False" DataTooltip="{x:Null}" x:Name="MotorBR"
+                                            DisableAnimations="True" LegendLocation="None" IsEnabled="{Binding AttEnable}">
+                        <lvc:CartesianChart.Series>
+                            <lvcG:GLineSeries Title = "Speed Percentage" LineSmoothness = "0" Fill ="Transparent" Values ="{Binding MotorBRPoints}"  PointGeometry = "{x:Null}"/>
+                        </lvc:CartesianChart.Series>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis FontSize="14" ShowLabels="False"/>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis FontSize="14" LabelFormatter="{Binding Formatter}" MinValue="0" MaxValue="100">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Step="10"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </Canvas>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

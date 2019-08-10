@@ -1,4 +1,5 @@
 ﻿using DencopterMonitoring.Application.Views;
+using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -20,7 +21,7 @@ namespace DencopterMonitoring.Presentation.Views
     /// Interaction logic for ShellWindow.xaml
     /// </summary>
     [Export(typeof(IShellView))]
-    public partial class ShellWindow : Window, IShellView
+    public partial class ShellWindow : IShellView
     {
         public ShellWindow()
         {

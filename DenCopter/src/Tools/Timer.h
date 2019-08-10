@@ -23,5 +23,4 @@ void startTimer();
 // Return the time in microseconds from the high resulution
 us getTimeU();
 
-
 #endif

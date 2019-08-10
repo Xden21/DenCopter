@@ -105,6 +105,7 @@ void TCPComm::loggerThread(void* newsocketfd)
 	int socketfd = *(int*)newsocketfd;
 	char buffer[256];
 	bool finish = false;
+	bool firstTime = true;
 
 	auto closeSocket = [&]()
 	{
@@ -127,6 +128,7 @@ void TCPComm::loggerThread(void* newsocketfd)
 
 		if (buffer[0] == 1 || buffer[0] == 11)
 		{
+			std::string message = "OK||";
 			if (buffer[0] == 11)
 			{
 				// PID also came in.
@@ -144,10 +146,15 @@ void TCPComm::loggerThread(void* newsocketfd)
 				PIDDataAvailable = true;
 				PIDLock.unlock();
 				PIDSignal.notify_one();
+				message = "PID||";
+				// So other connected clients get updated values too.
 			}
-			
-			std::string message = "OK||";
-
+			if (firstTime)
+			{
+				// Write PID data, so client knows actual values
+				firstTime = false;
+				message = "PID||";
+			}
 			// So the array isn't changed during message build.
 			std::unique_lock<std::mutex> lock(LogDataMutex);
 			message += buildMessageData(loggingData, logAmount);
@@ -157,7 +164,7 @@ void TCPComm::loggerThread(void* newsocketfd)
 			std::unique_lock<std::mutex> PIDLock(PIDMutex);
 			std::string PIDMessage = buildMessageData(PIDData_Raw, PID_DATA_COUNT);
 			PIDLock.unlock();
-			message += "|" + PIDMessage;
+			message += PIDMessage;
 
 			// Send message.
 			const char* wbuf = message.c_str();

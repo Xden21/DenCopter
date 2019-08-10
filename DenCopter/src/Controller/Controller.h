@@ -95,7 +95,7 @@ public:
 	void setAngleMode(bool angleMode_arg);
 	bool getAngleMode();
 	void setInput(float* inputs, int altMode, bool killSwitch);
-	void getAttitudeData(float* data);
+	void getFlightData(float* data);
 
 
 	//TEMP

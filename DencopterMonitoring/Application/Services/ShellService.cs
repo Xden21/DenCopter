@@ -6,48 +6,66 @@ namespace DencopterMonitoring.Application.Services
     [Export(typeof(IShellService))]
     public class ShellService: Model, IShellService
     {
+        private bool angleVisible;
 
-        private string currentView;
-        public string CurrentView
+        public bool AngleVisible
         {
-            get => currentView;
-            set => SetProperty(ref currentView, value);
+            get { return angleVisible; }
+            set { SetProperty(ref angleVisible, value); }
+        }
+        
+        private object angleMonitoringViewModel;
+
+        public object AngleMonitoringViewModel
+        {
+            get { return angleMonitoringViewModel; }
+            set { SetProperty(ref angleMonitoringViewModel, value); }
         }
 
-        private object currentViewModel;
-        public object CurrentViewModel
+        private bool motorVisible;
+
+        public bool MotorVisible
         {
-            get => currentViewModel;
-            set => SetProperty(ref currentViewModel, value);
+            get { return motorVisible; }
+            set { SetProperty(ref motorVisible, value); }
         }
 
-        public object MonitoringViewModel { get; set; }
+        private object motorMonitoringViewModel;
 
-        public object PID_TuningViewModel { get; set; }
+        public object MotorMonitoringViewModel
+        {
+            get { return motorMonitoringViewModel; }
+            set { SetProperty(ref motorMonitoringViewModel, value); }
+        }
 
+        private bool pidVisible;
+
+        public bool PIDVisible
+        {
+            get { return pidVisible; }
+            set { SetProperty(ref pidVisible, value); }
+        }
+
+        private object pID_TuningViewModel;
+
+        public object PID_TuningViewModel
+        {
+            get { return pID_TuningViewModel; }
+            set { SetProperty(ref pID_TuningViewModel, value); }
+        }
+        
         private object statusBarViewModel;
         public object StatusBarViewModel
         {
             get { return statusBarViewModel; }
             set { SetProperty(ref statusBarViewModel, value); }
-        }
+        }        
 
-        public  void ChangeView(object arg)
+        public ShellService()
         {
-            string name = arg as string;
-            switch (name)
-            {
-                case "Monitoring":
-                    CurrentViewModel = MonitoringViewModel;
-                    CurrentView = "Monitoring";
-                    break;
-                case "PID_Tuning":
-                    CurrentViewModel = PID_TuningViewModel;
-                    CurrentView = "PID_Tuning";
-                    break;
-                default:
-                    break;
-            }
+            AngleVisible = true;
+            MotorVisible = false;
+            PIDVisible = false;
         }
     }
 }

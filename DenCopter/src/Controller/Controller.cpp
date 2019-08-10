@@ -226,9 +226,19 @@ void Controller::setInput(float* inputs, int altMode, bool killSwitch)
 	this->killSwitch.store(killSwitch);
 }
 
-void Controller::getAttitudeData(float* data)
+void Controller::getFlightData(float* data)
 {
-	data[0] = sensor->yaw;
-	data[1] = sensor->pitch;
-	data[2] = sensor->roll;
+	data[0] = 0;
+	data[1] = 0;
+	data[2] = 0;
+	data[3] = sensor->yaw;
+	data[4] = sensor->pitch;
+	data[5] = sensor->roll;
+	data[6] = 0;
+	data[7] = 0;
+	data[8] = 0;
+	data[9] = motorFL->getCurrentSpeedNum();
+	data[10] = motorFR->getCurrentSpeedNum();
+	data[11] = motorBL->getCurrentSpeedNum();
+	data[12] = motorBR->getCurrentSpeedNum();
 }

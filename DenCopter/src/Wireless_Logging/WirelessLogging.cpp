@@ -62,6 +62,7 @@ void WirelessLogging::PIDDataThreadFunc()
 	{
 		std::unique_lock<std::mutex> PIDLock(server.PIDMutex);
 		server.PIDSignal.wait(PIDLock, [&] {return server.PIDDataAvailable; });
+		server.PIDDataAvailable = false;
 		Attitude_PIDData data;
 		server.getAttitudePIDData(&data);
 		PIDLock.unlock();

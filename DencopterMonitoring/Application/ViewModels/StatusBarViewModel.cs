@@ -1,10 +1,15 @@
 ﻿using DencopterMonitoring.Application.Views;
+using System;
+using System.ComponentModel;
+using System.ComponentModel.Composition;
 using System.Waf.Applications;
 
 namespace DencopterMonitoring.Application.ViewModels
 {
+    [Export]
     public class StatusBarViewModel : ViewModel<IStatusBarView>
     {
+        [ImportingConstructor]
         public StatusBarViewModel(IStatusBarView view) : base(view)
         {
             connectionState = "Disconnected";
