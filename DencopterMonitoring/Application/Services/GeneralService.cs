@@ -15,8 +15,6 @@ namespace DencopterMonitoring.Application.Services
         public GeneralService()
         {
             flightMode = 0;
-            connected = false;
-            connecting = false;
         }
 
         private int flightMode;
@@ -27,29 +25,14 @@ namespace DencopterMonitoring.Application.Services
             set { SetProperty(ref flightMode, value); }
         }
 
-        private bool connected;
+        private int armed;
 
-        public bool Connected
+        public int Armed
         {
-            get { return connected; }
-            set { SetProperty(ref connected, value); }
+            get { return armed; }
+            set { SetProperty(ref armed, value); }
         }
 
-        private bool connecting;
-
-        public bool Connecting
-        {
-            get { return connecting; }
-            set { SetProperty(ref connecting, value); }
-        }
-
-        private bool disconnect;
-
-        public bool Disconnect
-        {
-            get { return disconnect; }
-            set { SetProperty(ref disconnect, value); }
-        }
 
         private PIDData pidData;
 

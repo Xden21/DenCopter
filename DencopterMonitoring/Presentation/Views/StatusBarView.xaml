@@ -51,8 +51,21 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </Border>
-                <Button Content="Disconnect" Margin="10" Padding="5"/>
-                <Button Content="Reset" Margin="10,0,10,10" Padding="5"/>
+                <Button Command="{Binding ConnectionSwitchCommand}" Margin="10" Padding="5">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Connected}" Value="True">
+                                    <Setter Property="Content" Value="Disconnect"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Connected}" Value="False">
+                                    <Setter Property="Content" Value="Connect"/>
+                                </DataTrigger>                                
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="Reset" Command="{Binding ResetCommand}" Margin="10,0,10,10" Padding="5"/>
             </StackPanel>            
         </GroupBox>
     </Grid>

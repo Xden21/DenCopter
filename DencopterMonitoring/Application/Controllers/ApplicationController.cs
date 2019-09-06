@@ -22,6 +22,7 @@ namespace DencopterMonitoring.Application.Controllers
         private readonly StatusBarController statusBarController;
         private readonly AngleMonitoringController angleMonitoringController;
         private readonly MotorMonitoringController motorMonitoringController;
+        private readonly NetworkAccessController networkAccessController;
         private readonly PIDController pIDController;
 
         private readonly IShellService shellService;
@@ -29,6 +30,7 @@ namespace DencopterMonitoring.Application.Controllers
         private readonly IGeneralService generalService;
         private readonly ISettingsService settingsService;
         private readonly IDataService dataService;
+        private readonly IConnectionService connectionService;
 
         private System.Timers.Timer guiUpdateTimer;
 
@@ -41,21 +43,25 @@ namespace DencopterMonitoring.Application.Controllers
                                         IGeneralService generalService,
                                         IShellService shellService,
                                         IDataService dataService,
+                                        IConnectionService connectionService,
                                         ShellViewModel shellViewModel,
                                         StatusBarController statusBarController,
                                         AngleMonitoringController angleMonitoringController,
                                         MotorMonitoringController motorMonitoringController,
-                                        PIDController pIDController)
+                                        PIDController pIDController,
+                                        NetworkAccessController networkAccessController)
         {
             this.settingsService = settingsService;
             this.generalService = generalService;
             this.shellService = shellService;
             this.dataService = dataService;
+            this.connectionService = connectionService;
             this.shellViewModel = shellViewModel;
             this.statusBarController = statusBarController;
             this.angleMonitoringController = angleMonitoringController;
             this.motorMonitoringController = motorMonitoringController;
             this.pIDController = pIDController;
+            this.networkAccessController = networkAccessController;
         }
 
         #endregion
@@ -75,11 +81,14 @@ namespace DencopterMonitoring.Application.Controllers
         public void Run()
         {
             shellViewModel.Show();
+            ThreadPool.QueueUserWorkItem(x => networkAccessController.TryConnect());
+            StartGuiUpdate();
         }
 
         public void Close()
         {
-
+            StopGuiUpdate();
+            networkAccessController.Disconnect();
         }
 
         private void SetupCharting()
@@ -113,7 +122,7 @@ namespace DencopterMonitoring.Application.Controllers
 
         private void UpdateData(object sender, ElapsedEventArgs args)
         {
-            if (generalService.Connected)
+            if (connectionService.CurrentConnectionState == ConnectionState.Connected)
             {
                 List<DataSet> newDataSets;
                 lock (dataService.DataLock)

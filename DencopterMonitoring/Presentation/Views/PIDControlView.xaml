@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DencopterMonitoring.Presentation.Views"
              xmlns:vm="clr-namespace:DencopterMonitoring.Application.ViewModels"
+             xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920"
              d:DataContext="{d:DesignInstance vm:PIDControlViewModel}">
@@ -19,18 +20,177 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <GroupBox Header="Roll Tuning" Grid.Row="0" Grid.Column="0" Margin="5">
-            
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="32" Text="Proportional: " Margin="0,0,5,0"/>
+                <mah:NumericUpDown Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="160" HorizontalAlignment="Left" FontSize="32" Margin="5" Value="{Binding PIDData.Roll_KP.Value}" Interval="0.01" Minimum="0" StringFormat="0.###">
+                    <mah:NumericUpDown.Style>
+                        <Style TargetType="mah:NumericUpDown">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PIDData.Roll_KP.Changed}" Value="True">
+                                    <Setter Property="Background" Value="LightYellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mah:NumericUpDown.Style>
+                </mah:NumericUpDown>
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="32" Text="Integral: " Margin="0,0,5,0"/>
+                <mah:NumericUpDown Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Width="160" HorizontalAlignment="Left" FontSize="32" Margin="5" Value="{Binding PIDData.Roll_KI.Value}" Interval="0.01" Minimum="0" StringFormat="0.###">
+                    <mah:NumericUpDown.Style>
+                        <Style TargetType="mah:NumericUpDown">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PIDData.Roll_KI.Changed}" Value="True">
+                                    <Setter Property="Background" Value="LightYellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mah:NumericUpDown.Style>
+                </mah:NumericUpDown>
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="32" Text="Derivative: " Margin="0,0,5,0"/>
+                <mah:NumericUpDown Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Width="160" HorizontalAlignment="Left" FontSize="32" Margin="5" Value="{Binding PIDData.Roll_KD.Value}" Interval="0.01" Minimum="0" StringFormat="0.###">
+                    <mah:NumericUpDown.Style>
+                        <Style TargetType="mah:NumericUpDown">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PIDData.Roll_KD.Changed}" Value="True">
+                                    <Setter Property="Background" Value="LightYellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mah:NumericUpDown.Style>
+                </mah:NumericUpDown>
+            </Grid>
         </GroupBox>
         <GroupBox Header="Pitch Tuning" Grid.Row="0" Grid.Column="1" Margin="0,5,5,5">
-            
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="32" Text="Proportional: " Margin="0,0,5,0"/>
+                <mah:NumericUpDown Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="160" HorizontalAlignment="Left" FontSize="32" Margin="5" Value="{Binding PIDData.Pitch_KP.Value}" Interval="0.01" Minimum="0" StringFormat="0.###">
+                    <mah:NumericUpDown.Style>
+                        <Style TargetType="mah:NumericUpDown">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PIDData.Pitch_KP.Changed}" Value="True">
+                                    <Setter Property="Background" Value="LightYellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mah:NumericUpDown.Style>
+                </mah:NumericUpDown>
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="32" Text="Integral: " Margin="0,0,5,0"/>
+                <mah:NumericUpDown Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Width="160" HorizontalAlignment="Left" FontSize="32" Margin="5" Value="{Binding PIDData.Pitch_KI.Value}" Interval="0.01" Minimum="0" StringFormat="0.###">
+                    <mah:NumericUpDown.Style>
+                        <Style TargetType="mah:NumericUpDown">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PIDData.Pitch_KI.Changed}" Value="True">
+                                    <Setter Property="Background" Value="LightYellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mah:NumericUpDown.Style>
+                </mah:NumericUpDown>
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="32" Text="Derivative: " Margin="0,0,5,0"/>
+                <mah:NumericUpDown Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Width="160" HorizontalAlignment="Left" FontSize="32" Margin="5" Value="{Binding PIDData.Pitch_KD.Value}" Interval="0.01" Minimum="0" StringFormat="0.###">
+                    <mah:NumericUpDown.Style>
+                        <Style TargetType="mah:NumericUpDown">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PIDData.Pitch_KD.Changed}" Value="True">
+                                    <Setter Property="Background" Value="LightYellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mah:NumericUpDown.Style>
+                </mah:NumericUpDown>
+            </Grid>
         </GroupBox>
         <GroupBox Header="Yaw Tuning" Grid.Row="0" Grid.Column="2" Margin="0,5,5,5">
-            
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="32" Text="Proportional: " Margin="0,0,5,0"/>
+                <mah:NumericUpDown Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="160" HorizontalAlignment="Left" FontSize="32" Margin="5" Value="{Binding PIDData.Yaw_KP.Value}" Interval="0.01" Minimum="0" StringFormat="0.###">
+                    <mah:NumericUpDown.Style>
+                        <Style TargetType="mah:NumericUpDown">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PIDData.Yaw_KP.Changed}" Value="True">
+                                    <Setter Property="Background" Value="LightYellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mah:NumericUpDown.Style>
+                </mah:NumericUpDown>
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="32" Text="Integral: " Margin="0,0,5,0"/>
+                <mah:NumericUpDown Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Width="160" HorizontalAlignment="Left" FontSize="32" Margin="5" Value="{Binding PIDData.Yaw_KI.Value}" Interval="0.01" Minimum="0" StringFormat="0.###">
+                    <mah:NumericUpDown.Style>
+                        <Style TargetType="mah:NumericUpDown">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PIDData.Yaw_KI.Changed}" Value="True">
+                                    <Setter Property="Background" Value="LightYellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mah:NumericUpDown.Style>
+                </mah:NumericUpDown>
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="32" Text="Derivative: " Margin="0,0,5,0"/>
+                <mah:NumericUpDown Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Width="160" HorizontalAlignment="Left" FontSize="32" Margin="5" Value="{Binding PIDData.Yaw_KD.Value}" Interval="0.01" Minimum="0" StringFormat="0.###">
+                    <mah:NumericUpDown.Style>
+                        <Style TargetType="mah:NumericUpDown">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PIDData.Yaw_KD.Changed}" Value="True">
+                                    <Setter Property="Background" Value="LightYellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mah:NumericUpDown.Style>
+                </mah:NumericUpDown>
+            </Grid>
         </GroupBox>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" >
-            <Button Content="Comfirm Tuning" Padding="8" FontSize="15" Margin="5"/>
-            <Button Content="Reset Tuning" Padding="8" FontSize="15" Margin="5"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" >
+            <Border BorderThickness="1" BorderBrush="LightGray" Margin="5" CornerRadius="5" Background="{Binding ElementName=TuningText, Path=Background}">
+                <Label x:Name="TuningText" FontSize="15" VerticalAlignment="Center" FontWeight="Bold" Padding="3">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DataModified}" Value="True">
+                                    <Setter Property="Background" Value="OrangeRed"/>
+                                    <Setter Property="Content" Value="Unsaved Changes"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding DataModified}" Value="False">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Content" Value="Actual Tuning"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+            </Border>
+            <Button Content="Comfirm Tuning" Command="{Binding SaveCommand}" IsEnabled="{Binding DataModified}" Padding="8" FontSize="15" Margin="5"/>
+            <Button Content="Reset Tuning" Command="{Binding ResetCommand}" IsEnabled="{Binding DataModified}" Padding="8" FontSize="15" Margin="5"/>
         </StackPanel>
     </Grid>
 </UserControl>

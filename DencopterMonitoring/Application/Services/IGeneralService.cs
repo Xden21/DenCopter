@@ -13,19 +13,7 @@ namespace DencopterMonitoring.Application.Services
             set;
         }
 
-        bool Connected
-        {
-            get;
-            set;
-        }
-
-        bool Connecting
-        {
-            get;
-            set;
-        }
-
-        bool Disconnect
+        int Armed
         {
             get;
             set;
