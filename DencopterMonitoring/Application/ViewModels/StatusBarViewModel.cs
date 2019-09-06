@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Waf.Applications;
+using System.Windows.Input;
 
 namespace DencopterMonitoring.Application.ViewModels
 {
@@ -14,8 +15,17 @@ namespace DencopterMonitoring.Application.ViewModels
         {
             connectionState = "Disconnected";
             _ARMStatus = "Disarmed";
-            flightMode = "Landed";
+            flightMode = "Rate Mode";
         }
+
+        private bool connected;
+
+        public bool Connected
+        {
+            get { return connected; }
+            set { SetProperty(ref connected, value); }
+        }
+
 
         private string connectionState;
 
@@ -40,5 +50,22 @@ namespace DencopterMonitoring.Application.ViewModels
             get { return flightMode; }
             set { SetProperty(ref flightMode, value); }
         }
+
+        private ICommand disconnectCommand;
+
+        public ICommand ConnectionSwitchCommand
+        {
+            get { return disconnectCommand; }
+            set { SetProperty(ref disconnectCommand, value); }
+        }
+
+        private ICommand resetCommand;
+
+        public ICommand ResetCommand
+        {
+            get { return resetCommand; }
+            set { SetProperty(ref resetCommand, value); }
+        }
+
     }
 }

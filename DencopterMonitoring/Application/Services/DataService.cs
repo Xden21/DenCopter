@@ -29,6 +29,7 @@ namespace DencopterMonitoring.Application.Services
             this.settingsService = settingsService;
             this.generalService = generalService;
             dataLock = new object();
+            AllDataSets = new List<DataSet>();
         }
 
         public event EventHandler<DataUpdateEventArgs> DataUpdateEvent;

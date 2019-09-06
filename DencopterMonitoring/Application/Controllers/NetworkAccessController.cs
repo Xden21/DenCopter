@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace DencopterMonitoring.Application.Controllers
 {
+    [Export]
     public class NetworkAccessController
     {
         #region NLog
@@ -30,6 +31,7 @@ namespace DencopterMonitoring.Application.Controllers
         private IGeneralService generalService;
         private ISettingsService settingsService;
         private IDataService dataService;
+        private IConnectionService connectionService;
         private TcpClient connection;
         private NetworkStream stream;
         private Thread NetworkThread;
@@ -41,14 +43,16 @@ namespace DencopterMonitoring.Application.Controllers
         #region Constructor
 
         [ImportingConstructor]
-        public NetworkAccessController(IGeneralService generalService, ISettingsService settingsService, IDataService dataFetchService)
+        public NetworkAccessController(IGeneralService generalService, ISettingsService settingsService, IDataService dataFetchService, IConnectionService connectionService)
         {
             this.generalService = generalService;
             this.settingsService = settingsService;
             this.dataService = dataFetchService;
+            this.connectionService = connectionService;
             dataFetchService.UnprocessedDataSets = new List<DataSet>();
-            generalService.PropertyChanged += GeneralService_PropertyChanged;
             connecting = false;
+            connectionService.ConnectSwitch += ConnectSwitch;
+            connectionService.Reset += ReConnect;
 #if OFFLINE
             time = 0;
             val = 0;
@@ -64,13 +68,28 @@ namespace DencopterMonitoring.Application.Controllers
             if (!connecting)
             {
                 connecting = true;
-                while (!generalService.Connected && !generalService.Disconnect)
+                connectionService.SetConnectionState(ConnectionState.Connecting);
+                while (connectionService.CurrentConnectionState != ConnectionState.Connected && connectionService.CurrentConnectionState != ConnectionState.Disconnected)
                 {
                     Connect();
                 }
                 Logger.Info("Connected");
                 connecting = false;
             }
+        }
+
+        private void ConnectSwitch(object sender, EventArgs args)
+        {
+            if (connectionService.CurrentConnectionState == ConnectionState.Connected || connectionService.CurrentConnectionState == ConnectionState.Connecting)
+                Disconnect();
+            else
+                ThreadPool.QueueUserWorkItem(x => TryConnect());
+        }
+
+        private void ReConnect(object sender, EventArgs args)
+        {
+            Disconnect();
+            ThreadPool.QueueUserWorkItem(x => TryConnect());
         }
 
         private bool Connect()
@@ -99,7 +118,7 @@ namespace DencopterMonitoring.Application.Controllers
                         Logger.Warn("Unknown Connection Response");
                     return false;
                 }
-                generalService.Connected = true;
+                connectionService.SetConnectionState(ConnectionState.Connected);
                 if (NetworkThread != null && NetworkThread.ThreadState == ThreadState.Running)
                 {
                     NetworkThread.Abort();
@@ -116,7 +135,7 @@ namespace DencopterMonitoring.Application.Controllers
             }
 #else
 
-            generalService.Connected = true;
+            connectionService.SetConnectionState(ConnectionState.Connected);
             if (NetworkThread != null && NetworkThread.ThreadState == ThreadState.Running)
             {
                 NetworkThread.Abort();
@@ -129,47 +148,32 @@ namespace DencopterMonitoring.Application.Controllers
 
         public void Disconnect()
         {
-            if (generalService.Connected)
+            if (connectionService.CurrentConnectionState == ConnectionState.Connected)
             {
 #if !OFFLINE
-                try
-                {
-                    byte[] data = Encoding.UTF8.GetBytes("end");
-                    stream.Write(data, 0, data.Length);
-                }
-                catch (Exception)
-                { }
+                //try
+                //{
+                //    byte[] data = Encoding.UTF8.GetBytes("end");
+                //    stream.Write(data, 0, data.Length);
+                //}
+                //catch (Exception)
+                //{ }
                 connection.Close();
 #endif
-                generalService.Connected = false;
+                connectionService.SetConnectionState(ConnectionState.Disconnected);
                 generalService.FlightMode = -1;
                 connection = null;
             }
+            else if (connectionService.CurrentConnectionState == ConnectionState.Connecting)
+                connectionService.SetConnectionState(ConnectionState.Disconnected);
         }
-        private void GeneralService_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Disconnect")
-            {
-                if (generalService.Disconnect)
-                {
-                    Disconnect();
-                }
-                else
-                {
-                    ThreadPool.QueueUserWorkItem((info) =>
-                    {
-                        TryConnect();
-                    });
-                }
-            }
-        }
-
+       
         /**
          * Reads the network at a certain interval
          */
         private void NetworkThreadRun()
         {
-            while (generalService.Connected)
+            while (connectionService.CurrentConnectionState == ConnectionState.Connected)
             {
 #if !OFFLINE
                 try
@@ -221,16 +225,20 @@ namespace DencopterMonitoring.Application.Controllers
                     {
                         dataService.TriggerPIDDataUpdateEvent(fetchedData.PIDData);
                     }
+
+                    generalService.FlightMode = fetchedData.FlightMode;
+                    generalService.Armed = fetchedData.Armed;
+
                     Thread.Sleep((int)(1.0 / settingsService.LoggerFreq * 1000.0));
                 }
                 catch (Exception ex)
                 {
                     Logger.Error(ex, "Network Error");
                     Thread.Sleep(100);
-                    if (connection != null && !connection.Connected && !generalService.Disconnect)
+                    if (connection != null && !connection.Connected)
                     {
                         if (!Connect())
-                            generalService.Connected = false;
+                            connectionService.SetConnectionState(ConnectionState.Disconnected);
                     }
                     continue;
                 }
@@ -249,9 +257,9 @@ namespace DencopterMonitoring.Application.Controllers
                     AngleReference = new EulerAngle { Roll = val/2, Pitch = val/2, Yaw = val/2 },
                     MotorSpeeds = new MotorSpeeds { MotorBL = val, MotorBR = val, MotorFL = val, MotorFR = val }
                 };
-                lock (dataFetchService.DataLock)
+                lock (dataService.DataLock)
                 {
-                    dataFetchService.UnprocessedDataSets.Add(fetchedData);
+                    dataService.UnprocessedDataSets.Add(fetchedData);
                 }
                 Thread.Sleep(10);
 #endif
@@ -317,15 +325,15 @@ namespace DencopterMonitoring.Application.Controllers
                         pIDData = new PIDData()
                         {
                             PIDMode = int.Parse(dataArray[13]),
-                            Yaw_KP = float.Parse(dataArray[14]),
-                            Yaw_KI = float.Parse(dataArray[15]),
-                            Yaw_KD = float.Parse(dataArray[16]),
-                            Pitch_KP = float.Parse(dataArray[17]),
-                            Pitch_KI = float.Parse(dataArray[18]),
-                            Pitch_KD = float.Parse(dataArray[19]),
-                            Roll_KP = float.Parse(dataArray[20]),
-                            Roll_KI = float.Parse(dataArray[21]),
-                            Roll_KD = float.Parse(dataArray[22])
+                            Yaw_KP = new PID_DataSet(float.Parse(dataArray[14])),
+                            Yaw_KI = new PID_DataSet(float.Parse(dataArray[15])),
+                            Yaw_KD = new PID_DataSet(float.Parse(dataArray[16])),
+                            Pitch_KP = new PID_DataSet(float.Parse(dataArray[17])),
+                            Pitch_KI = new PID_DataSet(float.Parse(dataArray[18])),
+                            Pitch_KD = new PID_DataSet(float.Parse(dataArray[19])),
+                            Roll_KP = new PID_DataSet(float.Parse(dataArray[20])),
+                            Roll_KI = new PID_DataSet(float.Parse(dataArray[21])),
+                            Roll_KD = new PID_DataSet(float.Parse(dataArray[22]))
                         };
                     }
                 }
