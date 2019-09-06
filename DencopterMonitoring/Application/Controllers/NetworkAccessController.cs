@@ -165,7 +165,7 @@ namespace DencopterMonitoring.Application.Controllers
         }
 
         /**
-         * Reads the network as fast as it gets data
+         * Reads the network at a certain interval
          */
         private void NetworkThreadRun()
         {
